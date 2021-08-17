@@ -15,9 +15,9 @@
 {% endblock %}
 
 {% block body %}
-    {% if entry_info %}
+    {% if entry_md %}
         <!-- safe filter tells django safe to output html string -->
-        {{entry_info|safe}}
+        {{entry_md|safe}}
     {% else %}
         <h1>Page Not Found!</h1>
     {% endif %}
