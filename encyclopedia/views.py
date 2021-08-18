@@ -37,7 +37,11 @@ def search_entry(request):
 
         #get entries where query is a substring
         if not entry_info:
-            entry_matches = check_substring(entry_info)
+            entry_matches = check_substring(entry)
+
+            return render(request, "encyclopedia/search.html", {
+                "entries": entry_matches
+            })
 
             #display search results page of entry_matches
 
@@ -49,7 +53,7 @@ def search_entry(request):
         else:
             entry_md = markdown.markdown(entry_info)
 
-            return render(request, "encyclopedia/entry.html", {
+            return render(request, "encyclopedia/search.html", {
                 "entry": entry,
                 "entry_md": entry_md
             })
@@ -62,16 +66,9 @@ def check_substring(substring):
     entry_matches = []
 
     for entry in entries:
-        if substring in entry:
+        print(f"entry: {entry} substring: {substring}")
+        print(substring in entry)
+        if substring.lower() in entry.lower():
             entry_matches.append(entry)
 
     return entry_matches
-            
-
-
-
-
-
-    print(f"test: {test}")
-    print("Exiting search_entry")
-    return HttpResponse("TEST")
