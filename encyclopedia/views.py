@@ -1,6 +1,7 @@
 from re import sub
 from django.http.response import HttpResponse
 from django.shortcuts import render
+from django import forms
 import markdown
 
 from . import util
@@ -32,12 +33,12 @@ def search_entry(request):
     if request.method == "POST":
         #request.POST includes submitted data & other info such as csrftoken
         post_data = request.POST
-        entry = post_data['q']
-        entry_info = util.get_entry(entry)
+        query = post_data['q']
+        entry_info = util.get_entry(query)
 
-        #get entries where query is a substring
+        #no entry found, get entries where query is a substring
         if not entry_info:
-            entry_matches = check_substring(entry)
+            entry_matches = check_substring(query)
 
             return render(request, "encyclopedia/search.html", {
                 "entries": entry_matches
@@ -51,10 +52,8 @@ def search_entry(request):
 
         #display existing entry page
         else:
-            entry_md = markdown.markdown(entry_info)
-
             return render(request, "encyclopedia/search.html", {
-                "entry": entry,
+                "entry": query,
                 "entry_md": entry_md
             })
         
@@ -72,3 +71,19 @@ def check_substring(substring):
             entry_matches.append(entry)
 
     return entry_matches
+
+
+def create_page(request):
+    if request.method == "GET":
+        return render(request, "encyclopedia/create.html")
+
+    if request.method == "POST":
+        title = request.POST["title"]
+        content = request.POST["content"]
+
+        print(title)
+        util.save_entry(title, content)
+        return render(request, "encyclopedia/entry.html", {
+            "entry": title,
+            "entry_md":  markdown.markdown(util.get_entry(title))
+        })
