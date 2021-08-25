@@ -7,6 +7,7 @@ urlpatterns = [
     # title of any encyclopedia entry
     path("search", views.search_entry, name="search_entry"),
     path("create", views.create_page, name="create"),
+    path("edit", views.edit_page, name="edit"),
     path("<str:entry>", views.display_entry, name="display_entry"),
 ]
 

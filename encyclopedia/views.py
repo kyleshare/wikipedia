@@ -16,16 +16,16 @@ def index(request):
 #second param is url (string path in urls.py)
 def display_entry(request, entry):
     entry_info = util.get_entry(entry)
-    entry_md = None
+    entry_html = None
 
     #convert info to markdown
     if entry_info:
-        entry_md = markdown.markdown(entry_info)
+        entry_html = markdown.markdown(entry_info)
     
 
     return render(request, "encyclopedia/entry.html", {
         "entry": entry,
-        "entry_md": entry_md
+        "entry_html": entry_html
     })
 
 #Why doesn't this func receive a second param?
@@ -54,7 +54,7 @@ def search_entry(request):
         else:
             return render(request, "encyclopedia/search.html", {
                 "entry": query,
-                "entry_md": entry_md
+                "entry_html": entry_html
             })
         
 
@@ -79,11 +79,27 @@ def create_page(request):
 
     if request.method == "POST":
         title = request.POST["title"]
-        content = request.POST["content"]
+        content = request.POST["content"].strip()
 
-        print(title)
+        print("Title is: ", title)
+        print(f"Content is: {content}")
+
         util.save_entry(title, content)
         return render(request, "encyclopedia/entry.html", {
             "entry": title,
-            "entry_md":  markdown.markdown(util.get_entry(title))
+            "entry_html":  markdown.markdown(util.get_entry(title))
         })
+
+def edit_page(request):
+    if request.method == "GET":
+        entry = request.GET['entry']
+        entry_info = util.get_entry(entry).strip()
+
+        return render(request, "encyclopedia/edit.html", {
+            "entry": entry,
+            "entry_md": entry_info
+        })
+
+    if request.method == "POST":
+        return create_page(request)
+        

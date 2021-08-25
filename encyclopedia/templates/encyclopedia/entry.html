@@ -15,11 +15,17 @@
 {% endblock %}
 
 {% block body %}
-    {% if entry_md %}
+    {% if entry_html %}
         <!-- safe filter tells django safe to output html string -->
-        {{entry_md|safe}}
+        {{entry_html|safe}}
     {% else %}
         <h1>Page Not Found!</h1>
     {% endif %}
+
+    <!-- passing info & altering page content, use form rather than <a href={% url 'edit' %}> -->
+    <form action="{% url 'edit' %}" method="GET">
+        <input type="hidden" name="entry" value={{entry}}>
+        <button type="submit">Edit Page</button>
+    </form>
 
 {% endblock %}

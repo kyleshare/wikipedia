@@ -8,13 +8,14 @@
     <form action="{% url 'create' %}" method="POST">
         {% csrf_token %}
         
-        <label for="title">Page Title</label>
-        <input id="title" name="title" type="text">
+        <div>
+            <label for="title">Page Title</label>
+            <input id="title" name="title" type="text">
 
-        <!-- textarea not an input type -->
-        <label for="content">Page Markdown Content</label>
-        <textarea id="content" name="content" placeholder="Description..."></textarea>
-
+            <!-- textarea not an input type -->
+            <label for="content">Page Markdown Content</label>
+            <textarea id="content" name="content" placeholder="Description..." rows="10" cols="10"></textarea>
+        </div>
         <input type="submit" value="Create Page">
     </form>
 {% endblock %}
